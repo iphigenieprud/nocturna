@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 4e461c84325b5f54aad683023432cf8f
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 313212
+  packageName: 'Base Humans: Woman'
+  packageVersion: 1.0
+  assetPath: Assets/Abandoned World/Base Humans - Woman/Shaders/SH_AW_PBR_ORM_Transparent_2side.shader
+  uploadId: 760953
