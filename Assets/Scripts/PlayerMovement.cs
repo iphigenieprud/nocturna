@@ -1,68 +1,120 @@
 using UnityEngine;
-#if ENABLE_INPUT_SYSTEM
-using UnityEngine.InputSystem;
-#endif
 
-// Put this on your PLAYER. Needs a Character Controller component.
-// WASD to walk, Space to jump.
-[RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
-    public float speed = 5f;
-    public float jumpHeight = 1.2f;
-    public float gravity = -20f;
+    public Animator anim;
+    public float walkSpeed = 2f;
+    public float runSpeed = 5f;
+    public float mouseSensitivity = 3f;
 
-    private CharacterController controller;
-    private float fallSpeed = 0f;
+    public int magazineSize = 8;
+    public float reloadTime = 1.5f;
+    public int ammo;
+
+    public GameObject handMagazine;
+    public float magShowTime = 2f;
+
+    Transform hips;
+    Vector3 hipsStart;
+    bool reloading;
+    float reloadTimer;
+    float magTimer;
 
     void Start()
     {
-        controller = GetComponent<CharacterController>();
+        if (anim == null) anim = GetComponentInChildren<Animator>();
+        hips = anim.GetBoneTransform(HumanBodyBones.Hips);
+        hipsStart = transform.InverseTransformPoint(hips.position);
+        Cursor.lockState = CursorLockMode.Locked;
+        ammo = magazineSize;
+        if (handMagazine != null) handMagazine.SetActive(false);
     }
 
     void Update()
     {
-        // Read WASD
-        Vector2 input = GetMoveInput();
+        transform.Rotate(0, Input.GetAxis("Mouse X") * mouseSensitivity, 0);
 
-        // Move in the direction the player is facing
-        Vector3 move = transform.right * input.x + transform.forward * input.y;
-        controller.Move(move * speed * Time.deltaTime);
+        float x = 0;
+        float y = 0;
 
-        // Gravity and jumping
-        if (controller.isGrounded && fallSpeed < 0f)
+        if (Input.GetKey(KeyCode.W)) y = 1;
+        if (Input.GetKey(KeyCode.S)) y = -1;
+        if (Input.GetKey(KeyCode.A)) x = -1;
+        if (Input.GetKey(KeyCode.D)) x = 1;
+
+        bool running = Input.GetKey(KeyCode.LeftShift);
+        bool runBack = running && y < 0 && x == 0;
+        float speed = running ? runSpeed : walkSpeed;
+
+        if (magTimer > 0)
         {
-            fallSpeed = -2f; // keeps us stuck to the ground
+            magTimer -= Time.deltaTime;
+            if (magTimer <= 0 && handMagazine != null) handMagazine.SetActive(false);
         }
 
-        if (controller.isGrounded && JumpPressed())
+        if (x != 0 || y != 0)
         {
-            fallSpeed = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            transform.Translate(new Vector3(x, 0, y).normalized * speed * Time.deltaTime);
+            anim.SetFloat("MoveX", x);
+            anim.SetFloat("MoveY", y);
+            anim.SetInteger("Mode", (running && !runBack) ? 1 : 0);
+            anim.SetFloat("AnimSpeed", runBack ? 1.6f : 1);
+            anim.ResetTrigger("Shoot");
+            anim.ResetTrigger("Reload");
+            if (reloading)
+            {
+                reloading = false;
+                magTimer = 0;
+                if (handMagazine != null) handMagazine.SetActive(false);
+            }
         }
+        else
+        {
+            anim.SetFloat("AnimSpeed", 0);
 
-        fallSpeed += gravity * Time.deltaTime;
-        controller.Move(Vector3.up * fallSpeed * Time.deltaTime);
+            if (reloading)
+            {
+                reloadTimer -= Time.deltaTime;
+                if (reloadTimer <= 0)
+                {
+                    ammo = magazineSize;
+                    reloading = false;
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.R) && ammo < magazineSize)
+            {
+                StartReload();
+            }
+            else if (Input.GetMouseButtonDown(0))
+            {
+                if (ammo > 0)
+                {
+                    anim.SetTrigger("Shoot");
+                    ammo--;
+                }
+                else
+                {
+                    StartReload();
+                }
+            }
+        }
     }
 
-    Vector2 GetMoveInput()
+    void StartReload()
     {
-#if ENABLE_INPUT_SYSTEM
-        Keyboard k = Keyboard.current;
-        if (k == null) return Vector2.zero;
-        float x = (k.dKey.isPressed ? 1 : 0) - (k.aKey.isPressed ? 1 : 0);
-        float y = (k.wKey.isPressed ? 1 : 0) - (k.sKey.isPressed ? 1 : 0);
-        return Vector2.ClampMagnitude(new Vector2(x, y), 1f);
-#else
-        return Vector2.ClampMagnitude(new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")), 1f);
-#endif
+        reloading = true;
+        reloadTimer = reloadTime;
+        anim.SetTrigger("Reload");
+
+        magTimer = magShowTime;
+        if (handMagazine != null) handMagazine.SetActive(true);
     }
 
-    bool JumpPressed()
+    void LateUpdate()
     {
-#if ENABLE_INPUT_SYSTEM
-        return Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame;
-#else
-        return Input.GetButtonDown("Jump");
-#endif
+        Vector3 p = transform.InverseTransformPoint(hips.position);
+        p.x = hipsStart.x;
+        p.z = hipsStart.z;
+        hips.position = transform.TransformPoint(p);
     }
 }

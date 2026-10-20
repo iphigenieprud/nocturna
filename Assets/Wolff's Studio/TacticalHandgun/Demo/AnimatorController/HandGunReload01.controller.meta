@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ba290fbb826bc204483298bb4a061d5b
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 339390
+  packageName: Tactical Handgun Animations
+  packageVersion: 2.0
+  assetPath: Assets/Wolff's Studio/TacticalHandgun/Demo/AnimatorController/HandGunReload01.controller
+  uploadId: 919080

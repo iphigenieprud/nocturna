@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 36b081574ab87024d86e9d0aa184a54f
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 339390
+  packageName: Tactical Handgun Animations
+  packageVersion: 2.0
+  assetPath: Assets/Wolff's Studio/TacticalHandgun/Demo/AnimatorController/HandGunGetUp2.controller
+  uploadId: 919080

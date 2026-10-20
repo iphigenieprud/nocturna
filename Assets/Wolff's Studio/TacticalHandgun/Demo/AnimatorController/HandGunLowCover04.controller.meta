@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2823c43d410a71b45a5c7a7671c61af3
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 339390
+  packageName: Tactical Handgun Animations
+  packageVersion: 2.0
+  assetPath: Assets/Wolff's Studio/TacticalHandgun/Demo/AnimatorController/HandGunLowCover04.controller
+  uploadId: 919080
