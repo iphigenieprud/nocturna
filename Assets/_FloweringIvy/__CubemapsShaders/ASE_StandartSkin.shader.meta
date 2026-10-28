@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 5f091799159828a4190943bb698cdb3e
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 183152
+  packageName: Flowering ivy
+  packageVersion: 1.0
+  assetPath: Assets/_FloweringIvy/__CubemapsShaders/ASE_StandartSkin.shader
+  uploadId: 401959

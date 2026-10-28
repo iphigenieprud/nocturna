@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6121c55f84d201b41aa4615f116a5223
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 183152
+  packageName: Flowering ivy
+  packageVersion: 1.0
+  assetPath: Assets/_FloweringIvy/Materials/IvyLeaves3.mat
+  uploadId: 401959

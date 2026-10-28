@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3875315772676042507
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2456601864488249846}
+  - component: {fileID: 4987197383776211074}
+  - component: {fileID: 8856147136783753621}
+  m_Layer: 0
+  m_Name: EndingManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2456601864488249846
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3875315772676042507}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.82, y: 0, z: 8.25025}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4987197383776211074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3875315772676042507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b29dfb0a485b33541a7459470b6b70aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndingManager
+  candlesSwallowedToLose: 5
+  lastChanceTime: 5
+  forgottenTitle: FORGOTTEN
+  forgottenLine: There is nothing left to do.
+  waitAfterKill: 3
+  emptyTitle: EMPTY
+  emptyLine: You have destroyed yourself.
+  caughtTitle: YOU LET IT HOLD YOU
+  caughtLine: It used to be so warm.
+  rememberedTitle: THE LIGHT WAS ALWAYS YOURS
+  rememberedLine: You have found a way.
+  allFoundHint: 'Every light must burn.
+
+    Then let her come.'
+  rememberedTextDelay: 6
+  pressRToRestart: 1
+  playerScripts: []
+--- !u!114 &8856147136783753621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3875315772676042507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b343f47ec0be2664292257ba9638b0db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MementoSpawner
+  glowMaterial: {fileID: 0}
+  glowColor: {r: 1, g: 0.85, b: 0.6, a: 1}
+  minDistance: 6
+  maxDistance: 15
+  heightAboveGround: 0.4
+  firstAppearLine: 'Something of yours is out there.
+
+    It''s waiting for you.'
+  types:
+  - memoryLine: humming an old song
+    prompt: '[E]   listen'
+  - memoryLine: warm hands
+    prompt: '[E]   remember'
+  - memoryLine: your name, said gently,
+    prompt: '[E]   answer'
+  - memoryLine: the light is on
+    prompt: '[E]   go in'
+  - memoryLine: peace
+    prompt: '[E]   hold on'
+  - memoryLine: a photo
+    prompt: '[E]   don''t move it'

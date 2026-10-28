@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5396552875756283776
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9050758447632895847}
+  - component: {fileID: 201087107156065430}
+  m_Layer: 0
+  m_Name: UIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9050758447632895847
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5396552875756283776}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.82, y: -0, z: 8.25025}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &201087107156065430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5396552875756283776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d521bfb6b4c77214d82af178431c7120, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIManager
+  ammoText: {fileID: 0}
+  ammoMaxText: {fileID: 0}
+  bulletRow: {fileID: 0}
+  bulletTemplate: {fileID: 0}
+  ammoNormal: {r: 0.86, g: 0.83, b: 0.78, a: 0.8}
+  ammoLow: {r: 0.85, g: 0.65, b: 0.45, a: 0.85}
+  ammoEmpty: {r: 0.7, g: 0.2, b: 0.18, a: 0.9}
+  bulletFull: {r: 0.86, g: 0.83, b: 0.78, a: 0.7}
+  bulletSpent: {r: 0.86, g: 0.83, b: 0.78, a: 0.12}
+  reloadGroup: {fileID: 0}
+  reloadFill: {fileID: 0}
+  reloadPrompt: {fileID: 0}
+  crosshair: {fileID: 0}
+  crossTop: {fileID: 0}
+  crossBottom: {fileID: 0}
+  crossLeft: {fileID: 0}
+  crossRight: {fileID: 0}
+  crosshairGap: 4
+  aimFade: 0.6
+  hitMarker: {fileID: 0}
+  hitMarkerTime: 0.25
+  healthBar: {fileID: 0}
+  healthFill: {fileID: 0}
+  healthLag: {fileID: 0}
+  healthColor: {r: 0.8, g: 0.77, b: 0.72, a: 0.75}
+  lowHealthColor: {r: 0.6, g: 0.15, b: 0.12, a: 0.85}
+  staminaBar: {fileID: 0}
+  staminaFill: {fileID: 0}
+  staminaColor: {r: 0.7, g: 0.72, b: 0.75, a: 0.6}
+  noStaminaColor: {r: 0.65, g: 0.2, b: 0.18, a: 0.9}
+  damageOverlay: {fileID: 0}
+  damageColor: {r: 0.5, g: 0, b: 0, a: 1}
+  memoryOverlay: {fileID: 0}
+  memoryColor: {r: 1, g: 0.8, b: 0.5, a: 1}
+  quietHud: 1
+  ammoGroup: {fileID: 0}
+  healthGroup: {fileID: 0}
+  soulsStyle: 1
+  strongPrompts: 1
+  holdRing: {fileID: 0}
+  holdRingBack: {fileID: 0}
+  candleCounter: {fileID: 0}
+  mementoCounter: {fileID: 0}
+  counterIdleAlpha: 0.35
+  promptLabel: {fileID: 0}
+  itemLabel: {fileID: 0}
+  endingPanel: {fileID: 0}
+  endingTitle: {fileID: 0}
+  endingLine: {fileID: 0}
+  restartHint: {fileID: 0}
+  endingFadeTime: 1
+  hud: {fileID: 0}

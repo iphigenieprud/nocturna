@@ -775,8 +775,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8572223388491940019}
-  - component: {fileID: 1962387321054819164}
   - component: {fileID: 8941019522869550604}
+  - component: {fileID: 4871351754457880593}
   m_Layer: 0
   m_Name: Ghost
   m_TagString: Untagged
@@ -802,28 +802,6 @@ Transform:
   - {fileID: 494351007809924418}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1962387321054819164
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2447006027428532308}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &8941019522869550604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -838,12 +816,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GhostFog
   smokeMaterial: {fileID: 2100000, guid: 7eb9d51c83d13e74084319dc2632966e, type: 2}
   emitFrom: []
+  lightColor: {r: 0, g: 0, b: 0, a: 0.7490196}
+  darkness: 0
+  darknessPerPuff: 0.002
+  darkMoreSmoke: 1.5
+  darkBiggerPuffs: 0.5
+  darkMoreWisps: 2
+  darkHeartFaster: 50
+  darkenSpeed: 0.2
   hideRealBody: 1
   bodyColor: {r: 0, g: 0, b: 0, a: 0.85490197}
   density: 300
   puffSize: {x: 0.35, y: 0.35}
   puffLife: {x: 0.4, y: 0.8}
   churn: 0.15
+  flow: 0.75
   headSmoke: 0.281
   headRadius: 0.25
   headOverride: {fileID: 5758887960781166199}
@@ -853,13 +840,40 @@ MonoBehaviour:
   heartLight: 1
   heartColor: {r: 1, g: 1, b: 1, a: 0.5529412}
   heartGlow: 0.52
-  heartSize: 0.8
+  heartSize: 0.5
   heartShowsThroughSmoke: 1
   heartIntensity: 0.1
   heartRange: 1
-  heartBPM: 40
+  heartBPM: 20
   heartSwell: 0.014
   heartSteadiness: 0.5
+--- !u!114 &4871351754457880593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2447006027428532308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8302849b2058efc499882bdcf08d1c7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShadowPerson
+  player: {fileID: 0}
+  walkSpeed: 2
+  hauntDistance: {x: 8, y: 18}
+  hauntInterval: {x: 4, y: 8}
+  attackCooldown: {x: 12, y: 20}
+  lungeSpeed: 4.5
+  blowTime: 2
+  candleGrace: 25
+  angerSpeedup: 1
+  darknessPerHit: 0.1
+  health: 30
+  catchDistance: 1
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &2524245847322467300
 GameObject:
   m_ObjectHideFlags: 0

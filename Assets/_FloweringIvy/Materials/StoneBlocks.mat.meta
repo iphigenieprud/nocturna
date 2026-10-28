@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7c0c0a316b45c61408f9f26aafccece4
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 183152
+  packageName: Flowering ivy
+  packageVersion: 1.0
+  assetPath: Assets/_FloweringIvy/Materials/StoneBlocks.mat
+  uploadId: 401959

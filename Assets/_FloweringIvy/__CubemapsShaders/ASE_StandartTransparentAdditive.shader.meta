@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: b94599c49cdf9d14180440b6cd484b40
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 183152
+  packageName: Flowering ivy
+  packageVersion: 1.0
+  assetPath: Assets/_FloweringIvy/__CubemapsShaders/ASE_StandartTransparentAdditive.shader
+  uploadId: 401959

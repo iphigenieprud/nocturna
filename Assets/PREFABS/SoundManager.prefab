@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4079751377848232579
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6643574815503665485}
+  - component: {fileID: 4433498872281620349}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6643574815503665485
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4079751377848232579}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -16.21391, y: -11.77289, z: 0.8602}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4433498872281620349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4079751377848232579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2201873d504d16d43aed2eaadbc553f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundManager
+  masterVolume: 1
+  ambienceVolume: 1
+  musicVolume: 0.122
+  effectsVolume: 0.9
+  ambience: {fileID: 8300000, guid: 04de440c52676354ea7920743fad9648, type: 3}
+  music: {fileID: 8300000, guid: 241fd8be080d8e241b3e29edb0dd9dad, type: 3}
+  details: []
+  detailInterval: {x: 4, y: 12}
+  waterLoop: {fileID: 8300000, guid: c5103d3908fd1ba4bae3fd858c309bc7, type: 3}
+  water: {fileID: 0}
+  quietNearHer: 0.7
+  heartbeat: {fileID: 0}
+  lungeWarning: {fileID: 8300000, guid: 150900e0c82d7524ca8f669dd1897112, type: 3}
+  vanish: {fileID: 0}
+  appear: {fileID: 0}
+  blowing: {fileID: 0}
+  death: {fileID: 0}
+  candleLight: {fileID: 0}
+  candleOut: {fileID: 0}
+  memoryAppear: {fileID: 0}
+  memoryTaken: {fileID: 0}
+  treeHum: {fileID: 0}
+  footsteps: []
+  hurt: {fileID: 0}
+  candlePain: {fileID: 0}
+  badEnding: {fileID: 0}
+  bestEnding: {fileID: 0}

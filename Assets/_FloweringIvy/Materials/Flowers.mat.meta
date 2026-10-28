@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: cb6d844ccff76f240bf8c398531b158f
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 183152
+  packageName: Flowering ivy
+  packageVersion: 1.0
+  assetPath: Assets/_FloweringIvy/Materials/Flowers.mat
+  uploadId: 401959

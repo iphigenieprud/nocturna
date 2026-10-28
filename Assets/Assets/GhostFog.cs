@@ -14,13 +14,34 @@ public class GhostSmokeBody : MonoBehaviour
     [Tooltip("Leave empty to pick automatically (skips hair, eyelashes, eyebrows, eyes, teeth).")]
     public SkinnedMeshRenderer[] emitFrom;
 
+    [Header("Darkness (grows as she absorbs candle smoke)")]
+    [Tooltip("Her color when she hasn't fed yet.")]
+    public Color lightColor = new Color(0.55f, 0.55f, 0.6f, 0.25f);
+    [Tooltip("0 = pale and light, 1 = pitch black. She starts at this value.")]
+    [Range(0f, 1f)] public float darkness = 0f;
+    [Tooltip("How much darker each absorbed smoke puff makes her.")]
+    public float darknessPerPuff = 0.002f;
+    [Tooltip("At full darkness she has this much more smoke. 1 = twice as much.")]
+    public float darkMoreSmoke = 1.5f;
+    [Tooltip("At full darkness her puffs are this much bigger. 0.5 = 50% bigger.")]
+    public float darkBiggerPuffs = 0.5f;
+    [Tooltip("At full darkness she trails this much more smoke. 2 = three times as much.")]
+    public float darkMoreWisps = 2f;
+    [Tooltip("At full darkness her heart beats this many beats per minute faster: she's angry.")]
+    public float darkHeartFaster = 50f;
+    [Tooltip("How fast she changes to her new darkness (so it happens smoothly, not in jumps).")]
+    public float darkenSpeed = 0.25f;
+
     [Header("Body Shape")]
     public bool hideRealBody = true;
+    [Tooltip("Her color when fully dark.")]
     public Color bodyColor = new Color(0f, 0f, 0f, 0.55f);
     public float density = 400f;
     public Vector2 puffSize = new Vector2(0.1f, 0.25f);
     public Vector2 puffLife = new Vector2(0.5f, 1.0f);
     public float churn = 0.15f;
+    [Tooltip("How smooth and flowing her smoke is. Higher = longer-lived, softer puffs that drift and swirl together.")]
+    [Range(0f, 1f)] public float flow = 0.75f;
 
     [Header("Head")]
     [Tooltip("1 = normal smoke around the head, 0 = almost none.")]
@@ -37,16 +58,16 @@ public class GhostSmokeBody : MonoBehaviour
     [Header("Heart")]
     public bool heartLight = true;
     public Color heartColor = new Color(0.6f, 0.75f, 1f);
-    [Range(0f, 10f)] public float heartGlow = 4f;
+    [Range(0f, 10f)] public float heartGlow = 1.5f;
     public float heartSize = 0.15f;
     public bool heartShowsThroughSmoke = true;
-    public float heartIntensity = 1.5f;
+    public float heartIntensity = 0.6f;
     public float heartRange = 2f;
 
     [Header("Heartbeat")]
     [Tooltip("Beats per minute. 60-70 is a calm resting heart.")]
-    [Range(30f, 120f)] public float heartBPM = 55f;
-    [Range(0f, 1f)] public float heartSwell = 0.25f;
+    [Range(20f, 120f)] public float heartBPM = 38f;
+    [Range(0f, 1f)] public float heartSwell = 0.15f;
     [Tooltip("Higher = the heart follows her chest more smoothly and is easier to aim at.")]
     [Range(0f, 1f)] public float heartSteadiness = 0.85f;
 
@@ -54,7 +75,11 @@ public class GhostSmokeBody : MonoBehaviour
 
     readonly List<ParticleSystem> bodySystems = new List<ParticleSystem>();
     readonly List<ParticleSystem> wispSystems = new List<ParticleSystem>();
-    ParticleSystem.Particle[] buffer = new ParticleSystem.Particle[3000];
+    ParticleSystem.Particle[] buffer = new ParticleSystem.Particle[6000];
+
+    // Longer-lived puffs, so fewer are needed for the same thickness
+    float LifeScale { get { return 1f + 1.5f * flow; } }
+    float RateScale { get { return 1.2f / LifeScale; } }
 
     Transform headBone;
 
@@ -66,6 +91,69 @@ public class GhostSmokeBody : MonoBehaviour
     ParticleSystem heartCorePS;
     Material heartGlowMat;
     Material heartCoreMat;
+
+    float appliedDarkness = -1f;
+    float shownDarkness;
+    int lastLoggedStep = -1;
+    readonly List<float> bodyShares = new List<float>();
+    readonly List<float> wispShares = new List<float>();
+
+    // How dark she is right now, 0 to 1 (other scripts can read this, like her "power")
+    public float Darkness { get { return darkness; } }
+
+    // Called by candles when she absorbs their smoke
+    public void AddDarkness(float amount)
+    {
+        darkness = Mathf.Clamp01(darkness + amount);
+    }
+
+    public void Feed(int puffs)
+    {
+        darkness = Mathf.Clamp01(darkness + puffs * darknessPerPuff);
+    }
+
+    void ApplyDarkness()
+    {
+        // Ease toward the real darkness so the change is smooth
+        shownDarkness = Mathf.MoveTowards(shownDarkness, darkness, darkenSpeed * Time.deltaTime);
+        if (appliedDarkness >= 0f && Mathf.Abs(appliedDarkness - shownDarkness) < 0.005f) return;
+        appliedDarkness = shownDarkness;
+
+        int step = Mathf.FloorToInt(darkness * 10f);
+        if (step != lastLoggedStep)
+        {
+            lastLoggedStep = step;
+            Debug.Log("GhostSmokeBody: darkness is now " + Mathf.RoundToInt(darkness * 100f) + "%");
+        }
+
+        float d = shownDarkness;
+        Color body = Color.Lerp(lightColor, bodyColor, d);
+        Color lightWisp = lightColor;
+        lightWisp.a *= 0.6f;
+        Color wisp = Color.Lerp(lightWisp, wispColor, d);
+
+        float sizeBoost = 1f + darkBiggerPuffs * d;
+
+        for (int i = 0; i < bodySystems.Count; i++)
+        {
+            ParticleSystem ps = bodySystems[i];
+            if (ps == null) continue;
+            var main = ps.main;
+            main.startColor = body;
+            main.startSize = new ParticleSystem.MinMaxCurve(puffSize.x * sizeBoost, puffSize.y * sizeBoost);
+            var emission = ps.emission;
+            emission.rateOverTime = density * bodyShares[i] * (1f + darkMoreSmoke * d) * RateScale;
+        }
+        for (int i = 0; i < wispSystems.Count; i++)
+        {
+            ParticleSystem ps = wispSystems[i];
+            if (ps == null) continue;
+            var main = ps.main;
+            main.startColor = wisp;
+            var emission = ps.emission;
+            emission.rateOverTime = wispAmount * wispShares[i] * (1f + darkMoreWisps * d);
+        }
+    }
 
     void Start()
     {
@@ -101,10 +189,12 @@ public class GhostSmokeBody : MonoBehaviour
                 ParticleSystem b = NewSystem("Smoke Body (" + parts[i].name + ")", smokeMaterial);
                 SetupBody(b, parts[i], null, share);
                 bodySystems.Add(b);
+                bodyShares.Add(share);
 
                 ParticleSystem w = NewSystem("Smoke Wisps (" + parts[i].name + ")", smokeMaterial);
                 SetupWisps(w, parts[i], null, share);
                 wispSystems.Add(w);
+                wispShares.Add(share);
             }
         }
         else
@@ -114,18 +204,23 @@ public class GhostSmokeBody : MonoBehaviour
             ParticleSystem b = NewSystem("Smoke Body", smokeMaterial);
             SetupBody(b, null, mesh, 1f);
             bodySystems.Add(b);
+            bodyShares.Add(1f);
 
             ParticleSystem w = NewSystem("Smoke Wisps", smokeMaterial);
             SetupWisps(w, null, mesh, 1f);
             wispSystems.Add(w);
+            wispShares.Add(1f);
         }
 
+        shownDarkness = darkness;
         if (heartLight) CreateHeart();
+        ApplyDarkness();
     }
 
     void Update()
     {
         UpdateHeart();
+        ApplyDarkness();
     }
 
     void LateUpdate()
@@ -157,12 +252,16 @@ public class GhostSmokeBody : MonoBehaviour
     void Thin(ParticleSystem ps, Vector3 head, float r2)
     {
         if (ps == null) return;
+        if (buffer.Length < ps.main.maxParticles) buffer = new ParticleSystem.Particle[ps.main.maxParticles];
         int n = ps.GetParticles(buffer);
         bool changed = false;
 
         for (int i = 0; i < n; i++)
         {
             if ((buffer[i].position - head).sqrMagnitude > r2) continue;
+
+            // Only decide for brand-new puffs, so smoke drifting past the head never pops away
+            if (buffer[i].startLifetime - buffer[i].remainingLifetime > 0.1f) continue;
 
             // Each puff gets a fixed random number, so the decision doesn't flicker
             float keep = (buffer[i].randomSeed % 1000) / 1000f;
@@ -244,15 +343,15 @@ public class GhostSmokeBody : MonoBehaviour
     void SetupBody(ParticleSystem ps, SkinnedMeshRenderer skin, MeshRenderer mesh, float share)
     {
         var main = ps.main;
-        main.startLifetime = new ParticleSystem.MinMaxCurve(puffLife.x, puffLife.y);
+        main.startLifetime = new ParticleSystem.MinMaxCurve(puffLife.x * LifeScale, puffLife.y * LifeScale);
         main.startSpeed = new ParticleSystem.MinMaxCurve(0.01f, 0.05f);
         main.startSize = new ParticleSystem.MinMaxCurve(puffSize.x, puffSize.y);
         main.startColor = bodyColor;
         main.startRotation = new ParticleSystem.MinMaxCurve(0f, Mathf.PI * 2f);
-        main.maxParticles = 3000;
+        main.maxParticles = 6000;
 
         var emission = ps.emission;
-        emission.rateOverTime = density * share;
+        emission.rateOverTime = density * share * RateScale;
 
         ShapeFromBody(ps, skin, mesh);
 
@@ -263,7 +362,7 @@ public class GhostSmokeBody : MonoBehaviour
         vel.y = new ParticleSystem.MinMaxCurve(0.01f, 0.04f);
         vel.z = new ParticleSystem.MinMaxCurve(0f, 0f);
 
-        AddLook(ps, 0.8f, 1.4f, churn, 1.5f);
+        AddLook(ps, 0.8f, 1.5f, churn * (1f + 0.5f * flow), 1.5f * (1f - 0.6f * flow));
     }
 
     void SetupWisps(ParticleSystem ps, SkinnedMeshRenderer skin, MeshRenderer mesh, float share)
@@ -274,7 +373,7 @@ public class GhostSmokeBody : MonoBehaviour
         main.startSize = new ParticleSystem.MinMaxCurve(0.3f, 0.8f);
         main.startColor = wispColor;
         main.startRotation = new ParticleSystem.MinMaxCurve(0f, Mathf.PI * 2f);
-        main.maxParticles = 300;
+        main.maxParticles = 1000;
 
         var emission = ps.emission;
         emission.rateOverTime = wispAmount * share;
@@ -288,7 +387,7 @@ public class GhostSmokeBody : MonoBehaviour
         vel.y = new ParticleSystem.MinMaxCurve(wispRise * 0.5f, wispRise);
         vel.z = new ParticleSystem.MinMaxCurve(0f, 0f);
 
-        AddLook(ps, 0.6f, 1.8f, 0.3f, 0.4f);
+        AddLook(ps, 0.6f, 1.8f, 0.3f, 0.4f * (1f - 0.4f * flow));
     }
 
     // ---------- Heart: glowing wisps of light ----------
@@ -417,10 +516,23 @@ public class GhostSmokeBody : MonoBehaviour
     }
 
     // Steady "lub-dub" heartbeat at the chosen BPM, 0 to 1
+    float beatPhase;
+    float flare, flareTime = 1f;
+
+    // Her heart flares bright red for a moment (the warning before she charges)
+    public void FlareHeart(float seconds)
+    {
+        flareTime = Mathf.Max(0.05f, seconds);
+        flare = flareTime;
+    }
+
     float Beat()
     {
-        float secondsPerBeat = 60f / Mathf.Max(1f, heartBPM);
-        float t = Mathf.Repeat(Time.time, secondsPerBeat);
+        // Counts beats smoothly, so the heart can speed up without skipping
+        float bpm = Mathf.Max(1f, heartBPM + darkHeartFaster * shownDarkness);
+        beatPhase = Mathf.Repeat(beatPhase + Time.deltaTime * bpm / 60f, 1f);
+        float secondsPerBeat = 60f / bpm;
+        float t = beatPhase * secondsPerBeat;
         float lub = Mathf.Exp(-Mathf.Pow((t - 0.05f) * 14f, 2f));
         float dub = Mathf.Exp(-Mathf.Pow((t - 0.3f) * 14f, 2f)) * 0.6f;
         return Mathf.Clamp01(lub + dub);
@@ -434,14 +546,23 @@ public class GhostSmokeBody : MonoBehaviour
         float flicker = 0.92f + 0.16f * Mathf.PerlinNoise(Time.time * 1.2f, 0.37f);
         float glow = heartGlow * (0.5f + beat) * flicker;
 
-        SetGlowColor(heartGlowMat, heartColor, glow * 0.6f, 0.5f);
-        SetGlowColor(heartCoreMat, Color.Lerp(heartColor, Color.white, 0.5f), glow * 1.5f, 0.9f);
+        // Always her own color. Anger shows in the faster heartbeat, not the color.
+        Color c = heartColor;
 
-        heartRoot.localScale = Vector3.one * (1f + heartSwell * beat);
+        // Warning flare before she charges: a quick bright pulse
+        flare = Mathf.Max(0f, flare - Time.deltaTime);
+        float f = flare / flareTime;
+        if (f > 0f) glow *= 1f + 1.2f * f;
+
+        // Kept just bright enough to see through her darkest smoke (without a huge halo)
+        SetGlowColor(heartGlowMat, c, Mathf.Max(0.7f, glow * 0.5f), 0.45f);
+        SetGlowColor(heartCoreMat, Color.Lerp(c, Color.white, 0.5f), Mathf.Max(1.4f, glow * 1.2f), 0.9f);
+
+        heartRoot.localScale = Vector3.one * (1f + heartSwell * beat + 0.15f * f);
 
         if (heart != null)
         {
-            heart.color = heartColor;
+            heart.color = c;
             heart.range = heartRange;
             heart.intensity = heartIntensity * (0.5f + beat) * flicker;
         }
@@ -541,7 +662,7 @@ public class GhostSmokeBody : MonoBehaviour
 
         var rend = go.GetComponent<ParticleSystemRenderer>();
         rend.renderMode = ParticleSystemRenderMode.Billboard;
-        rend.sortMode = ParticleSystemSortMode.Distance;
+        rend.sortMode = ParticleSystemSortMode.None; // no re-sorting, so puffs don't pop in front of each other
         rend.material = mat;
         rend.shadowCastingMode = ShadowCastingMode.Off;
         rend.receiveShadows = false;
@@ -556,8 +677,8 @@ public class GhostSmokeBody : MonoBehaviour
         Gradient g = new Gradient();
         g.SetKeys(
             new[] { new GradientColorKey(Color.white, 0f), new GradientColorKey(Color.white, 1f) },
-            new[] { new GradientAlphaKey(0f, 0f), new GradientAlphaKey(1f, 0.2f), new GradientAlphaKey(0f, 1f) });
-        col.color = g;
+            new[] { new GradientAlphaKey(0f, 0f), new GradientAlphaKey(1f, 0.3f), new GradientAlphaKey(0.7f, 0.7f), new GradientAlphaKey(0f, 1f) });
+        col.color = g; // soft fade in, long soft fade out
 
         var sizeLife = ps.sizeOverLifetime;
         sizeLife.enabled = true;
@@ -566,16 +687,58 @@ public class GhostSmokeBody : MonoBehaviour
 
         var rot = ps.rotationOverLifetime;
         rot.enabled = true;
-        rot.z = new ParticleSystem.MinMaxCurve(-0.5f, 0.5f);
+        float spin = 0.5f * (1f - 0.6f * flow);
+        rot.z = new ParticleSystem.MinMaxCurve(-spin, spin);
 
+        // Slow, large swirls make the smoke flow instead of jitter
         var noise = ps.noise;
         noise.enabled = true;
         noise.strength = noiseStrength;
         noise.frequency = noiseFrequency;
-        noise.scrollSpeed = 0.5f;
+        noise.scrollSpeed = 0.5f * (1f - 0.5f * flow);
         noise.damping = true;
+        noise.octaveCount = 2;
+        noise.quality = ParticleSystemNoiseQuality.High;
 
         ps.Play();
+    }
+
+    // A burst of smoke from her whole body (when she's shot)
+    public void Flinch()
+    {
+        for (int i = 0; i < bodySystems.Count; i++)
+            if (bodySystems[i] != null) bodySystems[i].Emit(Mathf.CeilToInt(150f * bodyShares[i]));
+        for (int i = 0; i < wispSystems.Count; i++)
+            if (wispSystems[i] != null) wispSystems[i].Emit(Mathf.CeilToInt(40f * wispShares[i]));
+    }
+
+    // She fades into smoke (the old smoke stays behind and drifts away)
+    // instantly = true removes the smoke right away instead of letting it drift off
+    public void Vanish(bool instantly = false)
+    {
+        var how = instantly ? ParticleSystemStopBehavior.StopEmittingAndClear : ParticleSystemStopBehavior.StopEmitting;
+        foreach (ParticleSystem ps in bodySystems)
+            if (ps != null) ps.Stop(true, how);
+        foreach (ParticleSystem ps in wispSystems)
+            if (ps != null) ps.Stop(true, how);
+        if (heartRoot != null) heartRoot.gameObject.SetActive(false);
+    }
+
+    // She forms again wherever she is now
+    public void Appear()
+    {
+        foreach (ParticleSystem ps in bodySystems)
+            if (ps != null) ps.Play(true);
+        foreach (ParticleSystem ps in wispSystems)
+            if (ps != null) ps.Play(true);
+
+        if (heartLight)
+        {
+            SetHeart(true);
+            // Jump the heart straight to her chest so it doesn't fly across the map
+            if (heartRoot != null && heartAnchor != null)
+                heartRoot.position = heartAnchor.TransformPoint(heartAnchorOffset);
+        }
     }
 
     // Lets other scripts stop the smoke, for example when she dies

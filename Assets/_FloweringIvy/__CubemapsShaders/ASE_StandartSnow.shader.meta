@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: aac149e7e507ea64fb1a49ee3e38984a
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 183152
+  packageName: Flowering ivy
+  packageVersion: 1.0
+  assetPath: Assets/_FloweringIvy/__CubemapsShaders/ASE_StandartSnow.shader
+  uploadId: 401959

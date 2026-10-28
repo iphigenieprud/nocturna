@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: ccbdea634bcfa8b4c8c6a3522c1dd22d
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 183152
+  packageName: Flowering ivy
+  packageVersion: 1.0
+  assetPath: Assets/_FloweringIvy/__CubemapsShaders/ASE_Standart2SidedSimple.shader
+  uploadId: 401959

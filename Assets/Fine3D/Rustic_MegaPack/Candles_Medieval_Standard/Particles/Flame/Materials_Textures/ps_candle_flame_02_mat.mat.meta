@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 53d68d49e0c269b4b92cb613fe34f48d
+timeCreated: 1483393190
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 169477
+  packageName: Candles medieval
+  packageVersion: 1.0
+  assetPath: Assets/Fine3D/Rustic_MegaPack/Candles_Medieval_Standard/Particles/Flame/Materials_Textures/ps_candle_flame_02_mat.mat
+  uploadId: 730429

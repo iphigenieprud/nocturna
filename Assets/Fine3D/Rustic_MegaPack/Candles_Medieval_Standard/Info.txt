@@ -1,0 +1,24 @@
+How to use the CandlesMedievalStandard pack
+
+
+1. Some steps you need to take in order to make everything work:
+- in Project Settings / Player / Rendering dropdown, change the Color Space to Linear
+- In Project Settings / Quality / Other, change the Lod Bias to 3. If you don't want to change this due to your other props LOD's, just change the LOD's distances of the prefabs
+
+2. For Built-in:
+- install the post processing stack v2 from the Window / Package manager
+- unpack the "Built-in_materials" if you are upgrading from URP
+- unpack the "Built-in_demoScenes" for the demo scenes with post processing
+
+3. For URP:
+- unpack the "URP_materials" if you are upgrading from Built-in
+- unpack the "URP_demoScenes" for the demo scenes with Volumes
+
+
+4. NOTE: the texture ps_candle_flame_1_AB and the camera controller are used from the Unity Particle Pack that is free
+	- link: https://assetstore.unity.com/packages/essentials/tutorial-projects/unity-particle-pack-127325
+
+5. Possible issue: if you add the packs to the project before having the processing stack v2 installed, it's possible that the scenes might give some errors. 
+Just install the processing stack v2 and re-open the scenes or remove and post processing components and volumes from the scenes and re-open them. 
+
+For any doubts please join the Discord channel: https://discord.gg/9gSzXa4
